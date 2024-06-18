@@ -1,15 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'lib-data-grid',
+  selector: 'data-grid',
   standalone: true,
   imports: [],
-  template: `
-    <p>
-      data-grid works!
-    </p>
-  `,
-  styles: ``
+  templateUrl: './data-grid.component.html',
+  styleUrl: './data-grid.component.scss'
 })
 export class DataGridComponent {
 
