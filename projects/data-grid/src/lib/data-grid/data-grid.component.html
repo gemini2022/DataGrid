@@ -1,1 +1,43 @@
-<p>data-grid works!</p>
+<div #dataGridContainer class="data-grid-container" [ngStyle]="{'height': height()}">
+
+    <div class="border-container"
+         [ngStyle]="{'border-width': borderWidthValue,
+                     'border-radius': borderRadiusValues}">
+    </div>
+
+    <div class="columns-and-rows-container">
+        <div #columnsContainer
+             class="columns-container"
+             [ngStyle]="{'--scrollview-columns-container-scrollbar-width': scrollviewScrollbarWidth}">
+             <!-- [ngClass]="{'scrollview-columns-container': scrollview()}" -->
+
+            @for (column of header()?.columns(); track $index) {
+                <div class="column"
+                     [style.left.px]="column.left()"
+                     [style.width.px]="column.width()"
+                     [style.height.px]="$index === 1 && divScroll ? divScroll.scrollHeight : null"
+                     [ngStyle]="{'--data-grid-border-top-left-radius': borderTopLeftRadius,
+                                 '--data-grid-border-bottom-left-radius': borderBottomLeftRadius}"
+                     [ngClass]="{'first-column': $index === 0,
+                                 'selected-column': $index === selectedColumnIndex,
+                                 'previous-selected-column': $index === selectedColumnIndex - 1,
+                                 'first-selected-column': $index === 0 && selectedColumnIndex === 0,
+                                 'resizer-hover': $index === headerColumnResizerIndex && headerColumnResizerHovered,
+                                 'resizer-mousedown': $index === headerColumnResizerIndex && headerColumnResizerMouseDowned}">
+                </div>
+            }
+        </div>
+
+        <div #rowsContainer class="rows-container" [ngStyle]="{'padding-top': rowHeightValue}">
+            @if (rowHeightValue.length > 0) {
+                @for (row of rows; track $index) {
+                    <div #row class="row" [ngStyle]="{'height': rowHeightValue}"></div>
+                }
+            }
+        </div>
+    </div>
+
+    <div #scrollviewContainer class="scrollview-container" [ngStyle]="{'padding-bottom': borderWidthValue}">
+        <ng-content></ng-content>
+    </div>
+</div>

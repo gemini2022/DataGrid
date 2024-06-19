@@ -1,1 +1,16 @@
-<p>data-grid-header works!</p>
+<div #header
+     class="header"
+     ondragstart="return false;"
+     [ngStyle]="{'top': top,
+                 'height': height(),
+                 'font-size': fontSize(),
+                 'font-family': fontFamily(),
+                 'border-bottom-left-radius': 0,
+                 'border-bottom-right-radius': 0,
+                 '--data-grid-header-border-top-width': borderTopWidth,
+                 '--data-grid-header-border-left-width': borderLeftWidth,
+                 '--data-grid-header-border-right-width': borderRightWidth,
+                 '--data-grid-header-border-bottom-width': borderBottomWidth,
+                 '--data-grid-header-border-top-left-radius': borderTopLeftRadius}">
+    <ng-content></ng-content>
+</div>

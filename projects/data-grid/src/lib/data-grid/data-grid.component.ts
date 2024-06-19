@@ -1,10 +1,13 @@
 import { Component, ElementRef, Renderer2, contentChild, inject, input, output, viewChild } from '@angular/core';
 import { DataGridHeaderComponent } from '../data-grid-header/data-grid-header.component';
+import { CommonModule } from '@angular/common';
+import { DataGridColumn } from '../data-grid-column';
+import { DataGridHeaderColumnComponent } from '../data-grid-header-column/data-grid-header-column.component';
 
 @Component({
   selector: 'data-grid',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './data-grid.component.html',
   styleUrl: './data-grid.component.scss'
 })
@@ -16,7 +19,7 @@ export class DataGridComponent {
   public borderRadius = input<string>();
 
   // Output
-  // public columnSelectedEvent = output<DataGridColumn>();
+  public columnSelectedEvent = output<DataGridColumn>();
 
   // Private
   protected rows = [];
@@ -75,8 +78,8 @@ export class DataGridComponent {
     //   this.scrollview()?.verticalOverflowedEvent.subscribe((verticalOverflow: boolean) => this.onVerticalOverflow(verticalOverflow));
 
     // } else {
-    //   this.divScroll = this.scrollviewContainer()?.nativeElement.firstChild as HTMLElement;
-    //   this.removeScrollListener = this.renderer.listen(this.divScroll, 'scroll', () => this.onScroll(this.divScroll));
+      this.divScroll = this.scrollviewContainer()?.nativeElement.firstChild as HTMLElement;
+      this.removeScrollListener = this.renderer.listen(this.divScroll, 'scroll', () => this.onScroll(this.divScroll));
     // }
   }
 
@@ -90,7 +93,7 @@ export class DataGridComponent {
 
   private setBorderRadius(): void {
     this.borderRadiusValues = this.borderRadius() ? this.borderRadius()! : getComputedStyle(document.documentElement).getPropertyValue('--data-grid-border-radius');
-    // this.renderer.setStyle(this.dataGridContainer()?.nativeElement, 'border-radius', this.borderRadiusValues);
+    this.renderer.setStyle(this.dataGridContainer()?.nativeElement, 'border-radius', this.borderRadiusValues);
     this.borderTopLeftRadius = this.dataGridContainer()?.nativeElement.style.borderTopLeftRadius!;
     this.borderBottomLeftRadius = this.dataGridContainer()?.nativeElement.style.borderBottomLeftRadius!;
   }
@@ -98,10 +101,10 @@ export class DataGridComponent {
 
 
   private setHeaderColumnSelectSubscription(): void {
-    // this.header()?.columnSelectedEvent.subscribe((column: DataGridColumn) => {
-    //   this.columnSelectedEvent.emit(column);
-    //   this.selectedColumnIndex = column.index;
-    // })
+    this.header()?.columnSelectedEvent.subscribe((column: DataGridColumn) => {
+      this.columnSelectedEvent.emit(column);
+      this.selectedColumnIndex = column.index;
+    })
   }
 
 
@@ -124,12 +127,12 @@ export class DataGridComponent {
 
 
 
-  // private onScroll(scrollview: HTMLElement | ScrollviewComponent): void {
-  //   this.setRowsLength(scrollview);
-  //   this.header()?.setTop(scrollview?.scrollTop + 'px');
-  //   this.columnsContainer()!.nativeElement.scrollLeft = scrollview?.scrollLeft;
-  //   this.rowsContainer()!.nativeElement.style.top = -scrollview?.scrollTop + 'px';
-  // }
+  private onScroll(scrollview: HTMLElement): void { // | ScrollviewComponent
+    this.setRowsLength(scrollview);
+    this.header()?.setTop(scrollview?.scrollTop + 'px');
+    this.columnsContainer()!.nativeElement.scrollLeft = scrollview?.scrollLeft;
+    this.rowsContainer()!.nativeElement.style.top = -scrollview?.scrollTop + 'px';
+  }
 
 
 
@@ -139,32 +142,32 @@ export class DataGridComponent {
 
 
 
-  // private setRowsLength(scrollview: HTMLElement | ScrollviewComponent): void {
-  //   if (this.computedStyleRowHeight > 0) {
-  //     const rows = Math.floor(scrollview.scrollHeight / this.computedStyleRowHeight);
-  //     this.rows.length = rows < screen.height / this.computedStyleRowHeight ? screen.height / this.computedStyleRowHeight : rows;
-  //   }
-  // }
-
-
-
-  public selectColumn(columnIndex: number): void {
-    // if (this.header()?.columns()[columnIndex]) {
-    //   if (this.header()) this.header()!.columns()[columnIndex].isSortAscending = !this.header()?.columns()[columnIndex].isSortAscending;
-    //   this.updateColumns(this.header()?.columns()[columnIndex]!, columnIndex);
-    //   this.selectedColumnIndex = columnIndex;
-    //   this.columnSelectedEvent.emit({ index: columnIndex, isSortAscending: this.header()?.columns()[columnIndex].isSortAscending! });
-    // }
+  private setRowsLength(scrollview: HTMLElement): void { // | ScrollviewComponent
+    if (this.computedStyleRowHeight > 0) {
+      const rows = Math.floor(scrollview.scrollHeight / this.computedStyleRowHeight);
+      this.rows.length = rows < screen.height / this.computedStyleRowHeight ? screen.height / this.computedStyleRowHeight : rows;
+    }
   }
 
 
 
-  // private updateColumns(selectedColumn: DataGridHeaderColumnComponent, selectedColumnIndex: number): void {
-  //   this.header()?.columns().forEach(x => {
-  //     if (x !== selectedColumn) x.isSortAscending = false;
-  //     x.setSelectedColumn(selectedColumn, this.header()?.columns()[selectedColumnIndex - 1]!);
-  //   })
-  // }
+  public selectColumn(columnIndex: number): void {
+    if (this.header()?.columns()[columnIndex]) {
+      if (this.header()) this.header()!.columns()[columnIndex].isSortAscending = !this.header()?.columns()[columnIndex].isSortAscending;
+      this.updateColumns(this.header()?.columns()[columnIndex]!, columnIndex);
+      this.selectedColumnIndex = columnIndex;
+      this.columnSelectedEvent.emit({ index: columnIndex, isSortAscending: this.header()?.columns()[columnIndex].isSortAscending! });
+    }
+  }
+
+
+
+  private updateColumns(selectedColumn: DataGridHeaderColumnComponent, selectedColumnIndex: number): void {
+    this.header()?.columns().forEach(x => {
+      if (x !== selectedColumn) x.isSortAscending = false;
+      x.setSelectedColumn(selectedColumn, this.header()?.columns()[selectedColumnIndex - 1]!);
+    })
+  }
 
 
 

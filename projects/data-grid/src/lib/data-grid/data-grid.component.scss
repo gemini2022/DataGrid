@@ -1,0 +1,130 @@
+.data-grid-container {
+    overflow: hidden;
+    position: relative;
+}
+
+
+.border-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    border: var(--data-grid-border-width) solid var(--data-grid-border-color);
+    border-top: none; // don't move
+}
+
+
+
+.columns-and-rows-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
+}
+
+
+
+.columns-container {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: absolute;
+
+    &::-webkit-scrollbar {
+        opacity: 0;
+    }
+}
+
+
+
+.scrollview-columns-container {
+    height: 100%;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    position: absolute;
+    width: calc(100% - var(--scrollview-columns-container-scrollbar-width));
+}
+
+
+
+.column {
+    height: 100%;
+    position: absolute;
+    border-right: 1px solid var(--data-grid-column-border-color);
+}
+
+
+
+.first-column {
+    @extend .column;
+    border-left: 1px solid var(--data-grid-column-border-color);
+    border-top-left-radius: var(--data-grid-border-top-left-radius);
+    border-bottom-left-radius: var(--data-grid-border-bottom-left-radius);
+}
+
+
+
+.selected-column {
+    background: var(--data-grid-column-background-selected-color);
+    border-right: 1px solid var(--data-grid-column-border-selected-color);
+}
+
+
+
+.first-selected-column {
+    @extend .selected-column;
+    border-left: 1px solid var(--data-grid-column-border-selected-color);
+}
+
+
+
+.previous-selected-column {
+    border-right: 1px solid var(--data-grid-column-border-selected-color);
+}
+
+
+
+.resizer-hover:not(.selected-column):not(.previous-selected-column) {
+    border-right: 1px solid var(--data-grid-column-resizer-hover-color);
+}
+
+
+
+.resizer-mousedown:not(.selected-column):not(.previous-selected-column) {
+    border-right: 1px solid var(--data-grid-column-resizer-selected-color);
+}
+
+
+
+.rows-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+
+
+.row {
+    border-top: 1px solid var(--data-grid-row-border-color);
+
+    &:first-child {
+        border-top: none;
+    }
+
+    &:nth-child(odd) {
+        background: var(--data-grid-odd-row-background-color);
+    }
+
+    &:nth-child(even) {
+        background: var(--data-grid-even-row-background-color);
+    }
+}
+
+
+
+.scrollview-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    padding-bottom: var(--data-grid-border-width);
+}

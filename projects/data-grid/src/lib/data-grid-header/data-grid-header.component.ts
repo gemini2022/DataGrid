@@ -1,140 +1,173 @@
-import { Component, ElementRef, input, output, signal, viewChild } from '@angular/core';
+import { Component, ElementRef, Renderer2, contentChildren, inject, input, output, viewChild } from '@angular/core';
+import { DataGridHeaderColumnComponent } from '../data-grid-header-column/data-grid-header-column.component';
+import { DataGridComponent } from '../data-grid/data-grid.component';
+import { DataGridColumn } from '../data-grid-column';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'data-grid-header',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './data-grid-header.component.html',
   styleUrl: './data-grid-header.component.scss'
 })
 export class DataGridHeaderComponent {
-  // Input
-  public initialWidth = input('0');
+  // Inputs
+  public height = input<string>();
+  public fontSize = input<string>();
+  public fontFamily = input<string>();
+  public borderWidth = input<string>();
 
   // Outputs
-  public movedEvent = output();
-  public hoveredEvent = output<boolean>();
-  public resizerHoveredEvent = output<boolean>();
-  public resizerMouseDownedEvent = output<boolean>();
-  // public selectedEvent = output<DataGridHeaderColumnComponent>();
-
-  // Public
-  public left = signal(0);
-  public width = signal(0);
-  public isSortAscending!: boolean;
+  public columnSelectedEvent = output<DataGridColumn>();
+  // public resizerHoveredEvent = output<HeaderColumnResizer>();
+  // public resizerMouseDownedEvent = output<HeaderColumnResizer>();
 
   // Private
-  protected _left!: number;
-  protected last: boolean = false;
-  protected first: boolean = false;
+  protected top!: string;
   protected borderTopWidth!: string;
   protected borderLeftWidth!: string;
   protected borderRightWidth!: string;
-  protected resizerMouseDown!: boolean;
   protected borderBottomWidth!: string;
+  private renderer = inject(Renderer2);
+  protected borderRadiusValues!: string;
   protected borderTopLeftRadius!: string;
-  protected indentHovered: boolean = false;
-  protected resizerHoveredColumn: boolean = false;
-  // private resizer = viewChild(ColumnResizerDirective);
-  // protected selectedColumn!: DataGridHeaderColumnComponent;
-  private column = viewChild<ElementRef<HTMLElement>>('column');
-  // protected resizerSelectedColumn!: DataGridHeaderColumnComponent;
+  private dataGrid = inject(DataGridComponent);
+  private header = viewChild<ElementRef<HTMLElement>>('header');
+  public columns = contentChildren(DataGridHeaderColumnComponent);
 
 
 
   private ngOnInit(): void {
-    // this.resizer()?.movedEvent.subscribe((width: number) => this.onResizerMove(width));
-    // this.resizer()?.mouseDownedEvent.subscribe((mouseDown: boolean) => this.onResizerMouseDown(mouseDown));
+    this.setBorderWidth();
+    this.setBorderRadius();
+    this.columns().forEach((column, i, columns) => {
+      this.setLastColumn(column, i);
+      this.setColumnBorderWidth(column);
+      this.setColumnBorderRadius(column);
+      this.setColumnMoveSubscription(column);
+      this.initializeColumns(column, i, columns);
+      this.setResizerHoverSubscription(column, i);
+      this.setColumnSelectSubscription(column, i);
+      this.setResizerMouseDownSubscription(column, i);
+      this.setColumnHoverSubscription(column, i, columns);
+    })
+  }
+
+
+  public setTop(top: string): void {
+    this.top = top;
   }
 
 
 
-  private onResizerMove(width: number): void {
-    this.movedEvent.emit();
-    this.width.set(this.first ? width + 1 : this.last ? width + 11 : width);
+  private setBorderWidth(): void {
+    const borderWidth = this.borderWidth() ? this.borderWidth() : getComputedStyle(document.documentElement).getPropertyValue('--data-grid-header-border-width');
+    this.renderer.setStyle(this.header()?.nativeElement, 'border-width', borderWidth);
+    this.borderTopWidth = this.header()?.nativeElement.style.borderTopWidth!;
+    this.borderRightWidth = this.header()?.nativeElement.style.borderRightWidth!;
+    this.borderBottomWidth = this.header()?.nativeElement.style.borderBottomWidth!;
+    this.borderLeftWidth = this.header()?.nativeElement.style.borderLeftWidth!;
   }
 
 
 
-  private onResizerMouseDown(mouseDown: boolean): void {
-    this.resizerMouseDown = mouseDown;
-    this.resizerMouseDownedEvent.emit(mouseDown);
+  private setBorderRadius(): void {
+    this.borderRadiusValues = this.dataGrid.borderRadius() ? this.dataGrid.borderRadius()! : getComputedStyle(document.documentElement).getPropertyValue('--data-grid-border-radius');
+    this.renderer.setStyle(this.header()?.nativeElement, 'border-radius', this.borderRadiusValues);
+    this.borderTopLeftRadius = this.header()?.nativeElement.style.borderTopLeftRadius!;
   }
 
 
 
-  public setAsFirst(): void {
-    this.first = true;
+  private setLastColumn(column: DataGridHeaderColumnComponent, i: number): void {
+    if (i == this.columns().length - 1) column.setAsLast();
   }
 
 
 
-  public setAsLast(): void {
-    this.last = true;
+  private setColumnBorderWidth(column: DataGridHeaderColumnComponent): void {
+    column.setBorderWidth(this.borderTopWidth, this.borderRightWidth, this.borderBottomWidth, this.borderLeftWidth);
   }
 
 
 
-  public getInitialLeft(): number {
-    return this._left;
+  private setColumnBorderRadius(column: DataGridHeaderColumnComponent) {
+    column.setBorderRadius(this.header()?.nativeElement.style.borderTopLeftRadius!);
   }
 
 
 
-  public setInitialLeft(left: number): void {
-    this._left = left;
+  private setColumnMoveSubscription(column: DataGridHeaderColumnComponent): void {
+    column.movedEvent.subscribe(() => {
+      this.columns().forEach(x => {
+        x.updateLeft()
+      })
+    })
   }
 
 
 
-  protected getWidth(): number {
-    return parseFloat(this.initialWidth());
+  private initializeColumns(column: DataGridHeaderColumnComponent, i: number, columns: readonly DataGridHeaderColumnComponent[]): void {
+    if (i === 0) {
+      column.setAsFirst();
+      column.setInitialLeft(11);
+
+    } else {
+      column.setInitialLeft(columns[i - 1].getInitialLeft() + parseFloat(columns[i - 1].initialWidth()));
+    }
   }
 
 
 
-  public setIndentHovered(hovered: boolean): void {
-    this.indentHovered = hovered;
+  private setResizerHoverSubscription(column: DataGridHeaderColumnComponent, i: number): void {
+    // column.resizerHoveredEvent.subscribe((hovered: boolean) => this.resizerHoveredEvent.emit({ index: i, isHovered: hovered }));
   }
 
 
 
-  public updateResizerHoverStateOnColumnHover(hovered: boolean): void {
-    this.resizerHoveredColumn = hovered;
+  private setColumnSelectSubscription(column: DataGridHeaderColumnComponent, i: number): void {
+    column.selectedEvent.subscribe((column: DataGridHeaderColumnComponent) => {
+      this.onColumnSelect(column, i);
+    })
   }
 
 
 
-  protected onMouseDown(): void {
-    this.isSortAscending = !this.isSortAscending;
-    // this.selectedEvent.emit(this);
+  private setResizerMouseDownSubscription(column: DataGridHeaderColumnComponent, i: number): void {
+    // column.resizerMouseDownedEvent.subscribe((mouseDowned: boolean) => this.resizerMouseDownedEvent.emit({ index: i, mouseDowned: mouseDowned }));
   }
 
 
 
-  // public setSelectedColumn(column: DataGridHeaderColumnComponent, resizer: DataGridHeaderColumnComponent): void {
-  //   this.selectedColumn = column;
-  //   this.resizerSelectedColumn = resizer;
-  // }
-
-
-
-  public setBorderWidth(top: string, right: string, bottom: string, left: string): void {
-    this.borderTopWidth = top;
-    this.borderRightWidth = right;
-    this.borderBottomWidth = bottom;
-    this.borderLeftWidth = left;
+  private setColumnHoverSubscription(column: DataGridHeaderColumnComponent, i: number, columns: readonly DataGridHeaderColumnComponent[]) {
+    column.hoveredEvent.subscribe((hovered: boolean) => {
+      if (i === 0) {
+        columns[i].setIndentHovered(hovered);
+      } else if (i == this.columns().length - 1) {
+        columns[i].updateResizerHoverStateOnColumnHover(hovered);
+        columns[i - 1].updateResizerHoverStateOnColumnHover(hovered);
+      } else {
+        columns[i - 1].updateResizerHoverStateOnColumnHover(hovered);
+      }
+    })
   }
 
 
 
-  public setBorderRadius(topLeft: string): void {
-    this.borderTopLeftRadius = topLeft;
+  private onColumnSelect(selectedColumn: DataGridHeaderColumnComponent, selectedColumnIndex: number): void {
+    const columnIndex = this.columns().indexOf(selectedColumn);
+    const isSortAscending = selectedColumn.isSortAscending;
+    this.columnSelectedEvent.emit({ index: columnIndex, isSortAscending: isSortAscending });
+    this.updateColumns(selectedColumn, selectedColumnIndex);
   }
 
 
 
-  public updateLeft(): void {
-    this.left.set(this.column()?.nativeElement.offsetLeft! - (this.first ? 11 : 10));
+  private updateColumns(selectedColumn: DataGridHeaderColumnComponent, selectedColumnIndex: number): void {
+    this.columns().forEach(x => {
+      if (x !== selectedColumn) x.isSortAscending = false;
+      x.setSelectedColumn(selectedColumn, this.columns()[selectedColumnIndex - 1]);
+    })
   }
 }
