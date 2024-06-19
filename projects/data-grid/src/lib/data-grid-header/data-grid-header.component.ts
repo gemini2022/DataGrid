@@ -3,6 +3,7 @@ import { DataGridHeaderColumnComponent } from '../data-grid-header-column/data-g
 import { DataGridComponent } from '../data-grid/data-grid.component';
 import { DataGridColumn } from '../data-grid-column';
 import { CommonModule } from '@angular/common';
+import { HeaderColumnResizer } from '../header-column-resizer';
 
 @Component({
   selector: 'data-grid-header',
@@ -20,8 +21,8 @@ export class DataGridHeaderComponent {
 
   // Outputs
   public columnSelectedEvent = output<DataGridColumn>();
-  // public resizerHoveredEvent = output<HeaderColumnResizer>();
-  // public resizerMouseDownedEvent = output<HeaderColumnResizer>();
+  public resizerHoveredEvent = output<HeaderColumnResizer>();
+  public resizerMouseDownedEvent = output<HeaderColumnResizer>();
 
   // Private
   protected top!: string;
@@ -121,7 +122,7 @@ export class DataGridHeaderComponent {
 
 
   private setResizerHoverSubscription(column: DataGridHeaderColumnComponent, i: number): void {
-    // column.resizerHoveredEvent.subscribe((hovered: boolean) => this.resizerHoveredEvent.emit({ index: i, isHovered: hovered }));
+    column.resizerHoveredEvent.subscribe((hovered: boolean) => this.resizerHoveredEvent.emit({ index: i, isHovered: hovered }));
   }
 
 
@@ -135,7 +136,7 @@ export class DataGridHeaderComponent {
 
 
   private setResizerMouseDownSubscription(column: DataGridHeaderColumnComponent, i: number): void {
-    // column.resizerMouseDownedEvent.subscribe((mouseDowned: boolean) => this.resizerMouseDownedEvent.emit({ index: i, mouseDowned: mouseDowned }));
+    column.resizerMouseDownedEvent.subscribe((mouseDowned: boolean) => this.resizerMouseDownedEvent.emit({ index: i, mouseDowned: mouseDowned }));
   }
 
 

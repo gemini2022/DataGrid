@@ -1,0 +1,22 @@
+.header {
+    display: flex;
+    position: relative;
+    height: var(--data-grid-header-height);
+    font-size: var(--data-grid-header-column-font-size);
+    background: var(--data-grid-header-background-color);
+    font-weight: var(--data-grid-header-column-font-weight);
+    font-family: var(--data-grid-header-column-font-family);
+
+    &::before {
+        position: absolute;
+        content: "";
+        border: solid var(--data-grid-header-border-color);
+        border-top-width: var(--data-grid-header-border-top-width);
+        border-left-width: var(--data-grid-header-border-left-width);
+        border-right-width: var(--data-grid-header-border-right-width);
+        border-bottom-width: var(--data-grid-header-border-bottom-width);
+        border-top-left-radius: var(--data-grid-header-border-top-left-radius);
+        width: calc(100% - (var(--data-grid-header-border-left-width) + var(--data-grid-header-border-right-width)));
+        height: calc(var(--data-grid-header-height) - (var(--data-grid-header-border-top-width) + var(--data-grid-header-border-bottom-width)));
+    }
+}
