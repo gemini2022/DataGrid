@@ -1,1 +1,54 @@
-<p>data-grid-header-column works!</p>
+@if (first) {
+    <div class="first-column-indent"
+         (mousedown)="onMouseDown()"
+         [ngClass]="{'first-column-indent-hover': indentHovered,
+                     'first-column-indent-selected': selectedColumn === this}"
+         [style]="'--data-grid-header-column-border-top-width:' + borderTopWidth + ';' +
+                  '--data-grid-header-column-border-right-width:' + borderRightWidth + ';' +
+                  '--data-grid-header-column-border-bottom-width:' + borderBottomWidth + ';' +
+                  '--data-grid-header-column-border-left-width:' + borderLeftWidth"
+         [ngStyle]="{'border-top-left-radius': borderTopLeftRadius}">
+    </div>
+}
+
+<div #column
+     class="column" 
+     [style.left.px]="_left"
+     (mousedown)="onMouseDown()"
+     [style.width.px]="getWidth() - 10"
+     (mouseenter)="hoveredEvent.emit(true)"
+     (mouseleave)="hoveredEvent.emit(false)"
+     [ngClass]="{'selected-column': selectedColumn === this,
+                 'last-selected-column': last && selectedColumn == this}"
+     [style]="'--data-grid-header-column-border-top-width:' + borderTopWidth + ';' +
+              '--data-grid-header-column-border-right-width:' + borderRightWidth + ';' +
+              '--data-grid-header-column-border-bottom-width:' + borderBottomWidth + ';' +
+              '--data-grid-header-column-border-left-width:' + borderLeftWidth">
+
+    <div class="column-text">
+        <ng-content></ng-content>
+    </div>
+
+    @if (selectedColumn === this) {
+        <div class="sort-arrow-ascending"
+             [ngClass]="{'sort-arrow-descending': !isSortAscending}">
+        </div>
+    }
+</div>
+
+<div columnResizer
+     class="resizer"
+     [style.left.px]="_left + getWidth() - 21"
+     (mouseenter)="resizerHoveredEvent.emit(true)"
+     (mouseleave)="resizerHoveredEvent.emit(false)"
+     [ngClass]="{'last-resizer': last,
+                 'resizer-mousedown': resizerMouseDown,
+                 'resizer-column-hover': resizerHoveredColumn,
+                 'last-resizer-mousedown': last && resizerMouseDown,
+                 'last-resizer-column-hover': last && resizerHoveredColumn,
+                 'resizer-column-selected': resizerSelectedColumn === this}"
+     [style]="'--data-grid-header-column-border-top-width:' + borderTopWidth + ';' +
+              '--data-grid-header-column-border-right-width:' + borderRightWidth + ';' +
+              '--data-grid-header-column-border-bottom-width:' + borderBottomWidth + ';' +
+              '--data-grid-header-column-border-left-width:' + borderLeftWidth">
+</div>

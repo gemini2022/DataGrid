@@ -1,9 +1,11 @@
 import { Component, ElementRef, input, output, signal, viewChild } from '@angular/core';
+import { ColumnResizerDirective } from '../column-resizer.directive';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'data-grid-header-column',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, ColumnResizerDirective],
   templateUrl: './data-grid-header-column.component.html',
   styleUrl: './data-grid-header-column.component.scss'
 })
