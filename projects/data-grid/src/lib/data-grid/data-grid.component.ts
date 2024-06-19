@@ -1,4 +1,5 @@
 import { Component, ElementRef, Renderer2, contentChild, inject, input, output, viewChild } from '@angular/core';
+import { DataGridHeaderComponent } from '../data-grid-header/data-grid-header.component';
 
 @Component({
   selector: 'data-grid',
@@ -34,7 +35,7 @@ export class DataGridComponent {
   protected scrollviewScrollbarWidth: string = '0px';
   protected headerColumnResizerMouseDowned!: boolean;
   private row = viewChild<ElementRef<HTMLElement>>('row');
-  // protected header = contentChild(DataGridHeaderComponent);
+  protected header = contentChild(DataGridHeaderComponent);
   // protected scrollview = contentChild(ScrollviewComponent);
   private rowsContainer = viewChild<ElementRef<HTMLElement>>('rowsContainer');
   private columnsContainer = viewChild<ElementRef<HTMLElement>>('columnsContainer');

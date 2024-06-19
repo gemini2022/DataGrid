@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { DataGridComponent, DataGridHeaderComponent } from 'data-grid';
+import { DataGridComponent, DataGridHeaderComponent, DataGridHeaderColumnComponent } from 'data-grid';
 
 @Component({
   selector: 'app-root',
@@ -8,11 +8,12 @@ import { DataGridComponent, DataGridHeaderComponent } from 'data-grid';
   imports: [
     RouterOutlet,
     DataGridComponent,
-    DataGridHeaderComponent
+    DataGridHeaderComponent,
+    DataGridHeaderColumnComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  
+
 }
