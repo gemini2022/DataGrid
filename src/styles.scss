@@ -1,1 +1,85 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+    /* ===================== (DIMENSIONS) ===================== */
+
+    /* Data Grid */
+    --data-grid-width: none;
+    --data-grid-height: 729px;
+    --data-grid-row-height: 27px;
+    --data-grid-border-width: 1px;
+    --data-grid-border-radius: 0;
+
+
+    /* Header */
+    --data-grid-header-height: 27px;
+    --data-grid-header-border-width: 1px;
+
+
+    /* Header Column */
+    --data-grid-header-column-font-size: 13px;
+    --data-grid-header-column-font-weight: bold;
+    --data-grid-header-column-font-family: Arial, Helvetica, sans-serif;
+
+
+
+
+
+    /* ===================== (COLORS) ===================== */
+
+    /* Data Grid */
+    --data-grid-border-color: #6d6d6d;
+    --data-grid-row-border-color: none;
+    --data-grid-column-border-color: #6d6d6d;
+    --data-grid-odd-row-background-color: white;
+    --data-grid-even-row-background-color: #f0f0f0;
+
+
+    /* Header */
+    --data-grid-header-border-color: #6d6d6d;
+    --data-grid-header-background-color: #d3d3d3;
+
+
+    /* Header Column */
+    --data-grid-header-column-text-color: black;
+    --data-grid-header-column-border-color: #6d6d6d;
+    --data-grid-header-column-background-color: #d3d3d3;
+    --data-grid-header-column-sort-arrow-color: #a0a0a0;
+
+
+
+
+
+    /* ===================== (HOVER COLORS) ===================== */
+
+    /* Data Grid */
+    --data-grid-column-resizer-hover-color: #a5a5a5;
+
+    
+    /* Header Column */
+    --data-grid-header-column-text-hover-color: #4d4d4d;
+    --data-grid-header-column-border-hover-color: #666666;
+    --data-grid-header-column-resizer-hover-color: #a5a5a5;
+    --data-grid-header-column-background-hover-color: #dbdbdb;
+
+
+
+
+
+    /* ===================== (SELECTED COLORS) ===================== */
+
+    /* Data Grid */
+    --data-grid-column-border-selected-color: #808080;
+    --data-grid-column-resizer-selected-color: #cecece;
+    --data-grid-column-background-selected-color: rgba(145, 145, 145, 0.1);
+
+
+    /* Header Column */
+    --data-grid-header-column-text-selected-color: #5f5f5f;
+    --data-grid-header-column-border-selected-color: #808080;
+    --data-grid-header-column-resizer-selected-color: white;
+    --data-grid-header-column-background-selected-color: #e2e2e2;
+}
+
+
+* {
+    box-sizing: border-box;
+}

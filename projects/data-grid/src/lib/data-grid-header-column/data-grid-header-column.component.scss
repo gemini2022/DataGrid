@@ -6,7 +6,7 @@
     background: var(--data-grid-header-column-background-color);
     border-top: var(--data-grid-header-column-border-top-width) solid var(--data-grid-header-column-border-color);
     border-bottom: var(--data-grid-header-column-border-bottom-width) solid var(--data-grid-header-column-border-color);
-    border-left: var(--data-grid-header-column-border-left-width) solid var(--data-grid-header-column-border-color);
+    border-left: none;
 
     &:hover:not(.first-column-indent-selected) {
         background: var(--data-grid-header-column-background-hover-color);
@@ -263,9 +263,4 @@
         background: var(--data-grid-header-column-background-hover-color);
         border-right-color: var(--data-grid-header-column-border-hover-color);
     }
-}
-
-
-* {
-    box-sizing: border-box;
 }

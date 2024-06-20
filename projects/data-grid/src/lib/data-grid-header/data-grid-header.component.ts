@@ -65,6 +65,7 @@ export class DataGridHeaderComponent {
   private setBorderWidth(): void {
     const borderWidth = this.borderWidth() ? this.borderWidth() : getComputedStyle(document.documentElement).getPropertyValue('--data-grid-header-border-width');
     this.renderer.setStyle(this.header()?.nativeElement, 'border-width', borderWidth);
+    this.renderer.setStyle(this.header()?.nativeElement, 'border-right-width', '0');
     this.borderTopWidth = this.header()?.nativeElement.style.borderTopWidth!;
     this.borderRightWidth = this.header()?.nativeElement.style.borderRightWidth!;
     this.borderBottomWidth = this.header()?.nativeElement.style.borderBottomWidth!;
@@ -76,6 +77,7 @@ export class DataGridHeaderComponent {
   private setBorderRadius(): void {
     this.borderRadiusValues = this.dataGrid.borderRadius() ? this.dataGrid.borderRadius()! : getComputedStyle(document.documentElement).getPropertyValue('--data-grid-border-radius');
     this.renderer.setStyle(this.header()?.nativeElement, 'border-radius', this.borderRadiusValues);
+    this.renderer.setStyle(this.header()?.nativeElement, 'border-top-right-radius', '0');
     this.borderTopLeftRadius = this.header()?.nativeElement.style.borderTopLeftRadius!;
   }
 

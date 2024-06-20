@@ -3,6 +3,7 @@ import { DataGridHeaderComponent } from '../data-grid-header/data-grid-header.co
 import { CommonModule } from '@angular/common';
 import { DataGridColumn } from '../data-grid-column';
 import { DataGridHeaderColumnComponent } from '../data-grid-header-column/data-grid-header-column.component';
+import { HeaderColumnResizer } from '../header-column-resizer';
 
 @Component({
   selector: 'data-grid',
@@ -13,6 +14,7 @@ import { DataGridHeaderColumnComponent } from '../data-grid-header-column/data-g
 })
 export class DataGridComponent {
   // Inputs
+  public width = input<string>();
   public height = input<string>();
   public rowHeight = input<string>();
   public borderWidth = input<string>();
@@ -25,7 +27,10 @@ export class DataGridComponent {
   protected rows = [];
   protected divScroll!: HTMLElement;
   protected rowHeightValue!: string;
-  protected borderWidthValue!: string;
+  protected borderTopWidth!: string;
+  protected borderRightWidth!: string;
+  protected borderBottomWidth!: string;
+  protected borderLeftWidth!: string;
   private renderer = inject(Renderer2);
   protected borderRadiusValues!: string;
   protected selectedColumnIndex!: number;
@@ -46,7 +51,6 @@ export class DataGridComponent {
   private scrollviewContainer = viewChild<ElementRef<HTMLElement>>('scrollviewContainer');
 
 
-
   private ngOnInit(): void {
     this.setRowHeight();
     this.setScrollType();
@@ -61,7 +65,7 @@ export class DataGridComponent {
 
 
   private ngAfterViewInit(): void {
-    if (this.row()) this.computedStyleRowHeight = parseInt(getComputedStyle(this.row()?.nativeElement!).getPropertyValue('height'));
+    if (this.row()) this.computedStyleRowHeight = parseInt(getComputedStyle(this.row()?.nativeElement!).height);
   }
 
 
@@ -78,15 +82,21 @@ export class DataGridComponent {
     //   this.scrollview()?.verticalOverflowedEvent.subscribe((verticalOverflow: boolean) => this.onVerticalOverflow(verticalOverflow));
 
     // } else {
-      this.divScroll = this.scrollviewContainer()?.nativeElement.firstChild as HTMLElement;
-      this.removeScrollListener = this.renderer.listen(this.divScroll, 'scroll', () => this.onScroll(this.divScroll));
+    this.divScroll = this.scrollviewContainer()?.nativeElement.firstChild as HTMLElement;
+    this.removeScrollListener = this.renderer.listen(this.divScroll, 'scroll', () => this.onScroll(this.divScroll));
     // }
   }
 
 
 
   private setBorderWidth(): void {
-    this.borderWidthValue = this.borderWidth() ? this.borderWidth()! : getComputedStyle(document.documentElement).getPropertyValue('--data-grid-border-width');
+    const borderWidth = this.borderWidth() ? this.borderWidth()! : getComputedStyle(document.documentElement).getPropertyValue('--data-grid-border-width');
+    this.renderer.setStyle(this.dataGridContainer()?.nativeElement, 'border-width', borderWidth);
+    this.borderTopWidth = this.dataGridContainer()?.nativeElement.style.borderTopWidth!;
+    this.borderLeftWidth = this.dataGridContainer()?.nativeElement.style.borderLeftWidth!;
+    this.borderRightWidth = this.dataGridContainer()?.nativeElement.style.borderRightWidth!;
+    this.borderBottomWidth = this.dataGridContainer()?.nativeElement.style.borderBottomWidth!;
+
   }
 
 
@@ -110,26 +120,26 @@ export class DataGridComponent {
 
 
   private setHeaderResizerHoverSubscription(): void {
-    // this.header()?.resizerHoveredEvent.subscribe((headerColumnResizer: HeaderColumnResizer) => {
-    //   this.headerColumnResizerIndex = headerColumnResizer.index;
-    //   this.headerColumnResizerHovered = headerColumnResizer.isHovered!;
-    // })
+    this.header()?.resizerHoveredEvent.subscribe((headerColumnResizer: HeaderColumnResizer) => {
+      this.headerColumnResizerIndex = headerColumnResizer.index;
+      this.headerColumnResizerHovered = headerColumnResizer.isHovered!;
+    })
   }
 
 
 
   private setHeaderResizerMouseDownSubscription(): void {
-    // this.header()?.resizerMouseDownedEvent.subscribe((headerColumnResizer: HeaderColumnResizer) => {
-    //   this.headerColumnResizerIndex = headerColumnResizer.index;
-    //   this.headerColumnResizerMouseDowned = headerColumnResizer.mouseDowned!;
-    // })
+    this.header()?.resizerMouseDownedEvent.subscribe((headerColumnResizer: HeaderColumnResizer) => {
+      this.headerColumnResizerIndex = headerColumnResizer.index;
+      this.headerColumnResizerMouseDowned = headerColumnResizer.mouseDowned!;
+    })
   }
 
 
 
   private onScroll(scrollview: HTMLElement): void { // | ScrollviewComponent
     this.setRowsLength(scrollview);
-    this.header()?.setTop(scrollview?.scrollTop + 'px');
+    this.header()?.setTop((scrollview?.scrollTop) + 'px');
     this.columnsContainer()!.nativeElement.scrollLeft = scrollview?.scrollLeft;
     this.rowsContainer()!.nativeElement.style.top = -scrollview?.scrollTop + 'px';
   }

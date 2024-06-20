@@ -3,10 +3,38 @@
     <div style="overflow: auto; height: 100%;">
 
         <data-grid-header>
+            <data-grid-header-column #date initialWidth="150px">
+                Column 1
+            </data-grid-header-column>
 
-            <data-grid-header-column></data-grid-header-column>
+            <data-grid-header-column #transaction initialWidth="150px">
+                Column 2
+            </data-grid-header-column>
 
+            <data-grid-header-column #details initialWidth="150px">
+                Column 3
+            </data-grid-header-column>
+
+            <data-grid-header-column #amount initialWidth="150px">
+                Column 4
+            </data-grid-header-column>
+
+            <data-grid-header-column #balance initialWidth="150px">
+                Column 5
+            </data-grid-header-column>
         </data-grid-header>
+
+        <list width="fit-content" fontFamily="Arial, Helvetica, sans-serif" fontSize="14px" itemHeight="27px">
+            @for (item of sampleData; track $index) {
+            <list-item>
+                <list-item-text [width]="date.width()">{{item.column1}}</list-item-text>
+                <list-item-text [width]="transaction.width()">{{item.column2}}</list-item-text>
+                <list-item-text [width]="details.width()">{{item.column3}}</list-item-text>
+                <list-item-text [width]="amount.width()">{{item.column4}}</list-item-text>
+                <list-item-text [width]="balance.width() - 3">{{item.column5}}</list-item-text>
+            </list-item>
+            }
+        </list>
 
     </div>
 

@@ -37,7 +37,7 @@ export class DataGridHeaderColumnComponent {
   protected borderTopLeftRadius!: string;
   protected indentHovered: boolean = false;
   protected resizerHoveredColumn: boolean = false;
-  // private resizer = viewChild(ColumnResizerDirective);
+  private resizer = viewChild(ColumnResizerDirective);
   protected selectedColumn!: DataGridHeaderColumnComponent;
   private column = viewChild<ElementRef<HTMLElement>>('column');
   protected resizerSelectedColumn!: DataGridHeaderColumnComponent;
@@ -45,8 +45,8 @@ export class DataGridHeaderColumnComponent {
 
 
   private ngOnInit(): void {
-    // this.resizer()?.movedEvent.subscribe((width: number) => this.onResizerMove(width));
-    // this.resizer()?.mouseDownedEvent.subscribe((mouseDown: boolean) => this.onResizerMouseDown(mouseDown));
+    this.resizer()?.movedEvent.subscribe((width: number) => this.onResizerMove(width));
+    this.resizer()?.mouseDownedEvent.subscribe((mouseDown: boolean) => this.onResizerMouseDown(mouseDown));
   }
 
 

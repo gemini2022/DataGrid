@@ -1,17 +1,11 @@
 .data-grid-container {
     overflow: hidden;
     position: relative;
-}
-
-
-.border-container {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    border: var(--data-grid-border-width) solid var(--data-grid-border-color);
+    width: var(--data-grid-width);
+    height: var(--data-grid-height);
+    border: solid var(--data-grid-border-color);
     border-top: none; // don't move
 }
-
 
 
 .columns-and-rows-container {
@@ -57,7 +51,6 @@
 
 .first-column {
     @extend .column;
-    border-left: 1px solid var(--data-grid-column-border-color);
     border-top-left-radius: var(--data-grid-border-top-left-radius);
     border-bottom-left-radius: var(--data-grid-border-bottom-left-radius);
 }
@@ -67,13 +60,6 @@
 .selected-column {
     background: var(--data-grid-column-background-selected-color);
     border-right: 1px solid var(--data-grid-column-border-selected-color);
-}
-
-
-
-.first-selected-column {
-    @extend .selected-column;
-    border-left: 1px solid var(--data-grid-column-border-selected-color);
 }
 
 
@@ -126,5 +112,4 @@
     width: 100%;
     height: 100%;
     position: absolute;
-    padding-bottom: var(--data-grid-border-width);
 }
