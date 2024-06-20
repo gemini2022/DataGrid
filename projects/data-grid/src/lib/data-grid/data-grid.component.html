@@ -18,7 +18,7 @@
         @for (column of header()?.columns(); track $index) {
             <div class="column"
                     [style.left.px]="column.left()"
-                    [style.width.px]="column.width()"
+                    [style.width.px]="$index === header()?.columns()?.length! - 1 ? column.width() + 3 : column.width()"
                     [style.height.px]="$index === 1 && divScroll ? divScroll.scrollHeight : null"
                     [ngStyle]="{'--data-grid-border-top-left-radius': borderTopLeftRadius,
                                 '--data-grid-border-bottom-left-radius': borderBottomLeftRadius}"

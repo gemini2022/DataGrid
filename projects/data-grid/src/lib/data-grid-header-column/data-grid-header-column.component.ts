@@ -53,7 +53,7 @@ export class DataGridHeaderColumnComponent {
 
   private onResizerMove(width: number): void {
     this.movedEvent.emit();
-    this.width.set(this.first ? width + 1 : this.last ? width + 11 : width);
+    this.width.set(this.first ? width + 1 : this.last ? width + 8 : width);
   }
 
 
