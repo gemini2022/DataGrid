@@ -1,8 +1,9 @@
 .first-column-indent {
+    width: 11px;
     height: 100%;
     cursor: pointer;
     position: absolute;
-    width: 11px;
+    box-sizing: border-box;
     background: var(--data-grid-header-column-background-color);
     border-top: var(--data-grid-header-column-border-top-width) solid var(--data-grid-header-column-border-color);
     border-bottom: var(--data-grid-header-column-border-bottom-width) solid var(--data-grid-header-column-border-color);
@@ -58,11 +59,12 @@
 
 
 .column {
+    height: 100%;
     display: flex;
     cursor: pointer;
     position: absolute;
     align-items: center;
-    height: 100%;
+    box-sizing: border-box;
     background: var(--data-grid-header-column-background-color);
     border-top: var(--data-grid-header-column-border-top-width) solid var(--data-grid-header-column-border-color);
     border-bottom: var(--data-grid-header-column-border-bottom-width) solid var(--data-grid-header-column-border-color);
@@ -142,6 +144,7 @@
 
 .sort-arrow-ascending {
     margin: 0 11px 0 auto;
+    box-sizing: border-box;
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     border-bottom: 7px solid var(--data-grid-header-column-sort-arrow-color);
@@ -151,6 +154,7 @@
 
 .sort-arrow-descending {
     border-bottom: unset;
+    box-sizing: border-box;
     border-top: 7px solid var(--data-grid-header-column-sort-arrow-color);
 }
 
@@ -161,7 +165,7 @@
     height: 100%;
     cursor: ew-resize;
     position: absolute;
-
+    box-sizing: border-box;
 
     &::before {
         position: absolute;
@@ -199,6 +203,7 @@
 .last-resizer {
     width: 10px;
     height: 100%;
+    box-sizing: border-box;
 
     &::before {
         width: 0;

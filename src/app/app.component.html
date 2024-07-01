@@ -3,39 +3,37 @@
     <div style="overflow: auto; height: 100%;">
 
         <data-grid-header>
-            <data-grid-header-column #date initialWidth="150px">
+            <data-grid-header-column #column1 initialWidth="150px">
                 Column 1
             </data-grid-header-column>
 
-            <data-grid-header-column #transaction initialWidth="150px">
+            <data-grid-header-column #column2 initialWidth="150px">
                 Column 2
             </data-grid-header-column>
 
-            <data-grid-header-column #details initialWidth="150px">
+            <data-grid-header-column #column3 initialWidth="150px">
                 Column 3
             </data-grid-header-column>
 
-            <data-grid-header-column #amount initialWidth="150px">
+            <data-grid-header-column #column4 initialWidth="150px">
                 Column 4
             </data-grid-header-column>
 
-            <data-grid-header-column #balance initialWidth="150px">
+            <data-grid-header-column #column5 initialWidth="150px">
                 Column 5
             </data-grid-header-column>
         </data-grid-header>
 
         <list width="fit-content" fontFamily="Arial, Helvetica, sans-serif" fontSize="14px" itemHeight="27px">
             @for (item of sampleData; track $index) {
-            <list-item>
-                <list-item-text [width]="date.width()">{{item.column1}}</list-item-text>
-                <list-item-text [width]="transaction.width()">{{item.column2}}</list-item-text>
-                <list-item-text [width]="details.width()">{{item.column3}}</list-item-text>
-                <list-item-text [width]="amount.width()">{{item.column4}}</list-item-text>
-                <list-item-text [width]="balance.width()">{{item.column5}}</list-item-text>
-            </list-item>
+                <list-item>
+                    <list-item-text [width]="column1.width()">{{item.column1}}</list-item-text>
+                    <list-item-text [width]="column2.width()">{{item.column2}}</list-item-text>
+                    <list-item-text [width]="column3.width()">{{item.column3}}</list-item-text>
+                    <list-item-text [width]="column4.width()">{{item.column4}}</list-item-text>
+                    <list-item-text [width]="column5.width()">{{item.column5}}</list-item-text>
+                </list-item>
             }
         </list>
-
     </div>
-
 </data-grid>

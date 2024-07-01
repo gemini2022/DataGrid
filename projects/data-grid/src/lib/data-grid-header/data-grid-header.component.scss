@@ -1,6 +1,7 @@
 .header {
     display: flex;
     position: relative;
+    box-sizing: border-box;
     height: var(--data-grid-header-height);
     font-size: var(--data-grid-header-column-font-size);
     background: var(--data-grid-header-background-color);

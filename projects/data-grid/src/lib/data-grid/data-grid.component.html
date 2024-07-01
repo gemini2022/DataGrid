@@ -12,8 +12,8 @@
 
     <div #columnsContainer
             class="columns-container"
+            [ngClass]="{'scrollview-columns-container': scrollview()}"
             [ngStyle]="{'--scrollview-columns-container-scrollbar-width': scrollviewScrollbarWidth}">
-            <!-- [ngClass]="{'scrollview-columns-container': scrollview()}" -->
 
         @for (column of header()?.columns(); track $index) {
             <div class="column"

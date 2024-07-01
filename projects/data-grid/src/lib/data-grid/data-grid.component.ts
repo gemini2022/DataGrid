@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { DataGridColumn } from '../data-grid-column';
 import { DataGridHeaderColumnComponent } from '../data-grid-header-column/data-grid-header-column.component';
 import { HeaderColumnResizer } from '../header-column-resizer';
+import { ScrollviewComponent } from 'scrollview';
 
 @Component({
   selector: 'data-grid',
@@ -44,7 +45,7 @@ export class DataGridComponent {
   protected headerColumnResizerMouseDowned!: boolean;
   private row = viewChild<ElementRef<HTMLElement>>('row');
   protected header = contentChild(DataGridHeaderComponent);
-  // protected scrollview = contentChild(ScrollviewComponent);
+  protected scrollview = contentChild(ScrollviewComponent);
   private rowsContainer = viewChild<ElementRef<HTMLElement>>('rowsContainer');
   private columnsContainer = viewChild<ElementRef<HTMLElement>>('columnsContainer');
   private dataGridContainer = viewChild<ElementRef<HTMLElement>>('dataGridContainer');
@@ -77,14 +78,14 @@ export class DataGridComponent {
 
 
   private setScrollType(): void {
-    // if (this.scrollview()) {
-    //   this.scrollview()?.scrolledEvent.subscribe(() => this.onScroll(this.scrollview()!));
-    //   this.scrollview()?.verticalOverflowedEvent.subscribe((verticalOverflow: boolean) => this.onVerticalOverflow(verticalOverflow));
+    if (this.scrollview()) {
+      this.scrollview()?.scrolledEvent.subscribe(() => this.onScroll(this.scrollview()!));
+      this.scrollview()?.verticalOverflowedEvent.subscribe((verticalOverflow: boolean) => this.onVerticalOverflow(verticalOverflow));
 
-    // } else {
-    this.divScroll = this.scrollviewContainer()?.nativeElement.firstChild as HTMLElement;
-    this.removeScrollListener = this.renderer.listen(this.divScroll, 'scroll', () => this.onScroll(this.divScroll));
-    // }
+    } else {
+      this.divScroll = this.scrollviewContainer()?.nativeElement.firstChild as HTMLElement;
+      this.removeScrollListener = this.renderer.listen(this.divScroll, 'scroll', () => this.onScroll(this.divScroll));
+    }
   }
 
 
@@ -137,7 +138,7 @@ export class DataGridComponent {
 
 
 
-  private onScroll(scrollview: HTMLElement): void { // | ScrollviewComponent
+  private onScroll(scrollview: HTMLElement | ScrollviewComponent): void {
     this.setRowsLength(scrollview);
     this.header()?.setTop((scrollview?.scrollTop) + 'px');
     this.columnsContainer()!.nativeElement.scrollLeft = scrollview?.scrollLeft;
@@ -147,12 +148,12 @@ export class DataGridComponent {
 
 
   private onVerticalOverflow(verticalOverflow: boolean): void {
-    // this.scrollviewScrollbarWidth = verticalOverflow ? this.scrollview()?.getScrollbarWidth()! : '0px';
+    this.scrollviewScrollbarWidth = verticalOverflow ? this.scrollview()?.getScrollbarWidth()! : '0px';
   }
 
 
 
-  private setRowsLength(scrollview: HTMLElement): void { // | ScrollviewComponent
+  private setRowsLength(scrollview: HTMLElement | ScrollviewComponent): void {
     if (this.computedStyleRowHeight > 0) {
       const rows = Math.floor(scrollview.scrollHeight / this.computedStyleRowHeight);
       this.rows.length = rows < screen.height / this.computedStyleRowHeight ? screen.height / this.computedStyleRowHeight : rows;
